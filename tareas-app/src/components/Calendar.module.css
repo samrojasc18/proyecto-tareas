@@ -1,0 +1,257 @@
+.page { padding: 20px 20px 48px; max-width: 680px; margin: 0 auto; }
+
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+
+.backBtn {
+  background: var(--c100);
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--c700);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.backBtn:hover { background: var(--c200); }
+
+.monthNav { display: flex; align-items: center; gap: 10px; }
+
+.navBtn {
+  background: var(--c100);
+  border: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  color: var(--c700);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.12s;
+}
+
+.navBtn:hover { background: var(--c200); }
+
+/* Month title button + picker */
+.monthTitleWrap { position: relative; }
+
+.monthTitleBtn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--c900);
+  cursor: pointer;
+  font-family: inherit;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  transition: background 0.12s;
+  white-space: nowrap;
+}
+
+.monthTitleBtn:hover { background: var(--c100); }
+
+.monthCaret { font-size: 12px; color: var(--c500); }
+
+/* ── Picker dropdown ──────────────────────── */
+.picker {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0, 29, 57, 0.18);
+  border: 1px solid var(--c100);
+  padding: 16px;
+  z-index: 100;
+  min-width: 260px;
+}
+
+.pickerYearRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.pickerYearBtn {
+  background: var(--c50);
+  border: none;
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  color: var(--c700);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pickerYearBtn:hover:not(:disabled) { background: var(--c100); }
+.pickerYearBtn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.yearDropWrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.yearDropTrigger {
+  background: var(--c50);
+  border: 1.5px solid var(--c100);
+  border-radius: 10px;
+  padding: 5px 14px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--c700);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.12s;
+}
+
+.yearDropTrigger:hover { background: var(--c100); }
+
+.yearCaret { font-size: 9px; color: var(--c400); }
+
+.yearDropList {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 1px solid var(--c100);
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0,29,57,0.14);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  min-width: 90px;
+  padding: 4px;
+}
+
+.yearDropList::-webkit-scrollbar { width: 4px; }
+.yearDropList::-webkit-scrollbar-thumb { background: var(--c200); border-radius: 4px; }
+
+.yearDropItem {
+  display: block;
+  width: 100%;
+  padding: 7px 16px;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--c500);
+  cursor: pointer;
+  border-radius: 8px;
+  text-align: center;
+  transition: background 0.1s;
+}
+
+.yearDropItem:hover { background: var(--c50); color: var(--c700); }
+
+.yearDropActive {
+  background: var(--c700) !important;
+  color: #fff !important;
+  font-weight: 700;
+}
+
+.pickerMonths {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.pickerMonth {
+  background: var(--c50);
+  border: 1.5px solid transparent;
+  border-radius: 10px;
+  padding: 8px 4px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--c500);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.12s;
+}
+
+.pickerMonth:hover { background: var(--c100); color: var(--c700); }
+
+.pickerMonthActive {
+  background: var(--c200) !important;
+  border-color: var(--c400) !important;
+  color: var(--c900) !important;
+  font-weight: 700;
+}
+
+/* ── Calendar grid ────────────────────────── */
+.grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 20px; }
+
+.dayLabel { text-align: center; font-size: 11px; font-weight: 600; color: var(--c300); padding: 4px 0 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+.cell {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0;
+  font-family: inherit;
+  transition: all 0.12s;
+}
+
+.cell:hover { background: var(--c100); }
+.today { background: var(--c100); border-color: var(--c300); }
+.selected { background: var(--c700) !important; border-color: var(--c700) !important; }
+
+.dayNum { font-size: 13px; font-weight: 500; color: var(--c500); }
+.selected .dayNum { color: #fff; }
+.today .dayNum { color: var(--c700); font-weight: 700; }
+.today.selected .dayNum { color: #fff; }
+
+.dots { display: flex; gap: 2px; align-items: center; }
+.dot { width: 4px; height: 4px; border-radius: 50%; }
+.selected .dot { background: rgba(255,255,255,0.7) !important; }
+.dotMore { font-size: 9px; color: var(--c500); font-weight: 600; }
+.selected .dotMore { color: rgba(255,255,255,0.8); }
+
+/* ── Day panel ────────────────────────────── */
+.dayPanel { background: #fff; border-radius: 20px; padding: 20px; box-shadow: 0 2px 16px rgba(0,29,57,0.07); border: 1px solid var(--c100); }
+
+.dayPanelHeader { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+
+.dayPanelTitle { font-size: 16px; font-weight: 700; color: var(--c900); margin: 0 0 4px; text-transform: capitalize; }
+
+.dayPanelSub { font-size: 13px; color: var(--c300); margin: 0; }
+
+.addBtn { padding: 8px 16px; background: var(--c700); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; white-space: nowrap; }
+.addBtn:hover { background: var(--c900); }
+
+.empty { text-align: center; padding: 32px 0; color: var(--c300); font-size: 13px; }
+.empty p { margin: 0 0 12px; }
+.emptyBtn { background: none; border: 1.5px dashed var(--c200); border-radius: 10px; padding: 7px 18px; font-size: 13px; font-family: inherit; color: var(--c400); cursor: pointer; }
+.emptyBtn:hover { border-color: var(--c500); color: var(--c700); }
+
+.taskList { display: flex; flex-direction: column; gap: 8px; }

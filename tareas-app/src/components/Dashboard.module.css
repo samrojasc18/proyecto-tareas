@@ -1,0 +1,98 @@
+.page { min-height: 100%; background: var(--c50); }
+
+.hero {
+  background: linear-gradient(135deg, var(--c900) 0%, var(--c700) 60%, var(--c400) 100%);
+  padding: 40px 28px 64px;
+  color: #fff;
+}
+
+.heroInner { max-width: 640px; margin: 0 auto; }
+
+.greeting { font-size: 14px; opacity: 0.75; margin: 0 0 6px; text-transform: capitalize; letter-spacing: 0.02em; }
+
+.date { font-size: 28px; font-weight: 700; margin: 0 0 20px; text-transform: capitalize; }
+
+.subtitle { font-size: 14px; opacity: 0.7; margin: 0; }
+
+.progressWrap { display: flex; align-items: center; gap: 14px; }
+
+.progressBar { flex: 1; height: 5px; background: rgba(255,255,255,0.25); border-radius: 99px; overflow: hidden; }
+
+.progressFill { height: 100%; background: var(--c200); border-radius: 99px; transition: width 0.4s ease; }
+
+.progressText { font-size: 13px; opacity: 0.85; white-space: nowrap; }
+
+.content { max-width: 640px; margin: -28px auto 0; padding: 0 20px 60px; }
+
+.startCard {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 32px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,29,57,0.09);
+  margin-bottom: 20px;
+  border: 1px solid var(--c100);
+}
+
+.startIcon { font-size: 40px; margin-bottom: 14px; }
+
+.startTitle { font-size: 20px; font-weight: 700; color: var(--c900); margin: 0 0 10px; }
+
+.startDesc { font-size: 14px; color: var(--c500); margin: 0 0 24px; }
+
+.startBtn {
+  padding: 12px 28px;
+  background: var(--c700);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.startBtn:hover { background: var(--c900); }
+
+.section {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 10px rgba(0,29,57,0.06);
+  border: 1px solid var(--c100);
+}
+
+.sectionHeader { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+
+.sectionTitle { font-size: 11px; font-weight: 700; color: var(--c300); text-transform: uppercase; letter-spacing: 0.07em; margin: 0; }
+
+.badge { font-size: 11px; font-weight: 700; padding: 1px 8px; background: var(--c100); color: var(--c700); border-radius: 20px; }
+
+.badgeDone { background: #d1fae5; color: #065f46; }
+
+.badgeCancelled { background: #fee2e2; color: #991b1b; }
+
+.list { display: flex; flex-direction: column; gap: 8px; }
+
+.addBtn {
+  width: 100%;
+  padding: 11px;
+  background: #fff;
+  border: 1.5px dashed var(--c200);
+  border-radius: 12px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--c400);
+  cursor: pointer;
+  margin-top: 4px;
+  transition: all 0.15s;
+}
+
+.addBtn:hover { border-color: var(--c500); color: var(--c700); }
+
+.calendarLink { text-align: center; margin-top: 22px; }
+
+.linkBtn { background: none; border: none; font-size: 13px; font-family: inherit; color: var(--c500); cursor: pointer; font-weight: 500; }
+.linkBtn:hover { color: var(--c700); }

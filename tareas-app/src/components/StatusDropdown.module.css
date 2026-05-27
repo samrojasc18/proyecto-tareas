@@ -1,0 +1,85 @@
+.wrap { position: relative; display: inline-block; }
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1.5px solid transparent;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: filter 0.12s;
+}
+
+.trigger:hover { filter: brightness(0.93); }
+
+.dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+.caret { font-size: 8px; opacity: 0.55; margin-left: 2px; }
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 200;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 29, 57, 0.16);
+  padding: 6px;
+  min-width: 178px;
+  border: 1px solid var(--c100);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--c900);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+
+.option:hover { background: var(--c50); }
+
+.optDot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+.extra { padding: 8px 6px 4px; display: flex; flex-direction: column; gap: 8px; }
+
+.extraLabel { font-size: 11px; font-weight: 700; color: var(--c400); text-transform: uppercase; letter-spacing: 0.05em; margin: 0; }
+
+.input {
+  border: 1.5px solid var(--c100);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--c900);
+  background: var(--c50);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input:focus { border-color: var(--c500); }
+
+.extraRow { display: flex; justify-content: space-between; gap: 6px; }
+
+.btnBack { background: none; border: 1px solid var(--c100); border-radius: 7px; padding: 5px 10px; font-size: 12px; font-family: inherit; color: var(--c400); cursor: pointer; }
+
+.btnOk { flex: 1; background: var(--c700); border: none; border-radius: 7px; padding: 5px 14px; font-size: 12px; font-weight: 600; font-family: inherit; color: #fff; cursor: pointer; transition: background 0.15s; }
+
+.btnOk:hover:not(:disabled) { background: var(--c900); }
+
+.btnOk:disabled { opacity: 0.4; cursor: not-allowed; }

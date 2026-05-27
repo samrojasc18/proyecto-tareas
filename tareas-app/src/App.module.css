@@ -1,0 +1,239 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--c50);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  position: relative;
+}
+
+/* ── Overlay when floating sidebar is open ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 29, 57, 0.35);
+  z-index: 40;
+}
+
+/* ── Sidebar ─────────────────────────────── */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--c900);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 10px 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  transition: width 0.22s ease;
+  z-index: 50;
+}
+
+.sidebar.collapsed {
+  width: 58px;
+}
+
+.sidebar.floating {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
+}
+
+.sidebar.floating.collapsed {
+  width: 0;
+  padding: 0;
+}
+
+.sidebarTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding: 0 4px;
+  min-height: 36px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.brandIcon { font-size: 20px; flex-shrink: 0; }
+
+.brandName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.sidebarActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.pinBtn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  opacity: 0.35;
+  padding: 4px;
+  border-radius: 6px;
+  transition: opacity 0.15s;
+  line-height: 1;
+}
+
+.pinBtn:hover { opacity: 0.7; }
+.pinned { opacity: 0.9 !important; }
+
+.toggleBtn {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: var(--c100);
+  font-size: 16px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.toggleBtn:hover { background: rgba(255,255,255,0.15); }
+
+/* ── Nav items ──────────────────────────── */
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+  width: 100%;
+  overflow: hidden;
+}
+
+.navItem:hover { background: rgba(189, 216, 233, 0.12); }
+
+.navActive { background: var(--c700) !important; }
+
+.navIcon { font-size: 18px; flex-shrink: 0; }
+
+.navText { display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
+
+.navLabel { font-size: 13px; font-weight: 600; color: var(--c100); white-space: nowrap; }
+.navActive .navLabel { color: #fff; }
+
+.navDesc { font-size: 11px; color: var(--c300); white-space: nowrap; }
+
+/* ── Sidebar footer ─────────────────────── */
+.sidebarFooter {
+  padding-top: 16px;
+  border-top: 1px solid rgba(189, 216, 233, 0.12);
+  margin-top: 12px;
+}
+
+.taskCount {
+  font-size: 11px;
+  color: var(--c300);
+  background: rgba(189, 216, 233, 0.1);
+  padding: 6px 10px;
+  border-radius: 8px;
+  display: block;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ── Main wrap ──────────────────────────── */
+.mainWrap {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Floating expand button (when collapsed & floating) */
+.openBtn {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  background: var(--c700);
+  border: none;
+  color: var(--c100);
+  font-size: 16px;
+  width: 22px;
+  height: 56px;
+  border-radius: 0 10px 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 45;
+  transition: background 0.15s, width 0.15s;
+  box-shadow: 2px 0 8px rgba(0,29,57,0.2);
+}
+
+.openBtn:hover { background: var(--c500); width: 26px; }
+
+.main { flex: 1; overflow-y: auto; }
+
+/* ── Mobile ─────────────────────────────── */
+.mobileBar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--c900);
+  border-top: 1px solid rgba(189, 216, 233, 0.15);
+  z-index: 60;
+  padding: 6px 0 env(safe-area-inset-bottom, 0);
+}
+
+@media (max-width: 680px) {
+  .sidebar { display: none; }
+  .openBtn { display: none; }
+  .mobileBar { display: flex; }
+  .main { padding-bottom: 70px; }
+}
+
+.mobileTab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 4px;
+  border: none;
+  background: transparent;
+  font-size: 10px;
+  font-family: inherit;
+  color: var(--c300);
+}
+
+.mobileTab span:first-child { font-size: 20px; }
+.mobileTabActive { color: var(--c200); }
