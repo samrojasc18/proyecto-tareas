@@ -5,6 +5,19 @@ import styles from './Registros.module.css'
 
 const MONTHS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
 
+const SORT_OPTIONS = [
+  { value: 'createdAt',  label: 'Más recientes'   },
+  { value: 'title',      label: 'Nombre de tarea'  },
+  { value: 'priority',   label: 'Prioridad'        },
+  { value: 'status',     label: 'Estado'           },
+  { value: 'startDate',  label: 'Fecha inicio'     },
+  { value: 'endDate',    label: 'Deadline'         },
+  { value: 'category',   label: 'Categoría'        },
+  { value: 'totalTime',  label: 'Tiempo total'     },
+]
+
+const PRIORITY_ORDER = { high: 3, medium: 2, low: 1 }
+
 function fmtDuration(ms) {
   if (!ms || ms < 0) return '—'
   const m = Math.floor(ms / 60000)
@@ -38,10 +51,10 @@ function calcDurations(history) {
   const result = {}
   for (let i = 0; i < history.length; i++) {
     const entry = history[i]
-    const next = history[i + 1]
-    const ms = (next ? new Date(next.timestamp) : new Date()) - new Date(entry.timestamp)
-    const s = entry.toStatus
-    result[s] = (result[s] || 0) + ms
+    const next  = history[i + 1]
+    const ms    = (next ? new Date(next.timestamp) : new Date()) - new Date(entry.timestamp)
+    const s     = entry.toStatus
+    result[s]   = (result[s] || 0) + ms
   }
   return result
 }
@@ -51,14 +64,36 @@ function calcTotal(history) {
   return new Date() - new Date(history[0].timestamp)
 }
 
+function SortIcon({ field, sortField, sortDir }) {
+  if (sortField !== field)
+    return <span className={styles.sortIcon}>↕</span>
+  return (
+    <span className={`${styles.sortIcon} ${styles.sortIconActive}`}>
+      {sortDir === 'asc' ? '↑' : '↓'}
+    </span>
+  )
+}
+
 export default function Registros({ tasks }) {
-  const [search, setSearch] = useState('')
-  const [filterCat, setFilterCat] = useState('all')
-  const [filterStatus, setFilterStatus] = useState('all')
+  const [search,      setSearch]      = useState('')
+  const [filterCat,   setFilterCat]   = useState('all')
+  const [filterStatus,setFilterStatus]= useState('all')
   const [filterMonth, setFilterMonth] = useState('all')
-  const [filterYear, setFilterYear] = useState('all')
-  const [expanded, setExpanded] = useState(null)
+  const [filterYear,  setFilterYear]  = useState('all')
+  const [expanded,    setExpanded]    = useState(null)
+  const [sortField,   setSortField]   = useState('createdAt')
+  const [sortDir,     setSortDir]     = useState('desc')
+
   const categories = getCategories()
+
+  function handleSort(field) {
+    if (sortField === field) {
+      setSortDir(d => d === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortField(field)
+      setSortDir('asc')
+    }
+  }
 
   const years = useMemo(() => {
     const ys = [...new Set(tasks.map(t => (t.startDate || t.date || '').slice(0, 4)).filter(Boolean))]
@@ -66,24 +101,57 @@ export default function Registros({ tasks }) {
   }, [tasks])
 
   const filtered = useMemo(() => {
-    return tasks
-      .filter(t => {
-        const date = t.startDate || t.date || ''
-        const taskYear = date.slice(0, 4)
-        const taskMonth = date.slice(5, 7)
-        const q = search.toLowerCase()
-        return (
-          (filterCat === 'all' || t.category === filterCat) &&
-          (filterStatus === 'all' || t.status === filterStatus) &&
-          (filterYear === 'all' || taskYear === filterYear) &&
-          (filterMonth === 'all' || taskMonth === filterMonth.padStart(2,'0')) &&
-          (!q || t.title?.toLowerCase().includes(q) || t.description?.toLowerCase().includes(q) || t.category?.toLowerCase().includes(q))
-        )
-      })
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-  }, [tasks, search, filterCat, filterStatus, filterYear, filterMonth])
+    const list = tasks.filter(t => {
+      const date      = t.startDate || t.date || ''
+      const taskYear  = date.slice(0, 4)
+      const taskMonth = date.slice(5, 7)
+      const q         = search.toLowerCase()
+      return (
+        (filterCat    === 'all' || t.category === filterCat) &&
+        (filterStatus === 'all' || t.status   === filterStatus) &&
+        (filterYear   === 'all' || taskYear   === filterYear) &&
+        (filterMonth  === 'all' || taskMonth  === filterMonth.padStart(2, '0')) &&
+        (!q || t.title?.toLowerCase().includes(q) ||
+               t.description?.toLowerCase().includes(q) ||
+               t.category?.toLowerCase().includes(q))
+      )
+    })
 
-  const statusCounts = STATUS_LIST.map(s => ({ ...s, count: tasks.filter(t => t.status === s.value).length })).filter(s => s.count > 0)
+    const mult = sortDir === 'asc' ? 1 : -1
+    return list.sort((a, b) => {
+      switch (sortField) {
+        case 'title':
+          return mult * (a.title || '').toLowerCase().localeCompare((b.title || '').toLowerCase())
+        case 'category':
+          return mult * (a.category || '').toLowerCase().localeCompare((b.category || '').toLowerCase())
+        case 'status': {
+          const ai = STATUS_LIST.findIndex(s => s.value === a.status)
+          const bi = STATUS_LIST.findIndex(s => s.value === b.status)
+          return mult * (ai - bi)
+        }
+        case 'startDate': {
+          const av = a.startDate || a.date || ''
+          const bv = b.startDate || b.date || ''
+          return mult * (av < bv ? -1 : av > bv ? 1 : 0)
+        }
+        case 'endDate': {
+          const av = a.endDate || '9999-99-99'
+          const bv = b.endDate || '9999-99-99'
+          return mult * (av < bv ? -1 : av > bv ? 1 : 0)
+        }
+        case 'totalTime':
+          return mult * (calcTotal(a.history || []) - calcTotal(b.history || []))
+        case 'priority':
+          return mult * ((PRIORITY_ORDER[a.priority] || 0) - (PRIORITY_ORDER[b.priority] || 0))
+        default: // createdAt
+          return mult * (new Date(a.createdAt) - new Date(b.createdAt))
+      }
+    })
+  }, [tasks, search, filterCat, filterStatus, filterYear, filterMonth, sortField, sortDir])
+
+  const statusCounts = STATUS_LIST
+    .map(s => ({ ...s, count: tasks.filter(t => t.status === s.value).length }))
+    .filter(s => s.count > 0)
 
   return (
     <div className={styles.page}>
@@ -102,6 +170,7 @@ export default function Registros({ tasks }) {
         ))}
       </div>
 
+      {/* ── Buscador ── */}
       <div className={styles.toolbar}>
         <div className={styles.searchWrap}>
           <span className={styles.searchIcon}>🔍</span>
@@ -118,6 +187,7 @@ export default function Registros({ tasks }) {
         </div>
       </div>
 
+      {/* ── Filtros ── */}
       <div className={styles.filters}>
         <select value={filterYear} onChange={e => setFilterYear(e.target.value)} className={styles.select}>
           <option value="all">Todos los años</option>
@@ -140,10 +210,32 @@ export default function Registros({ tasks }) {
         </select>
 
         {(filterCat !== 'all' || filterStatus !== 'all' || filterMonth !== 'all' || filterYear !== 'all' || search) && (
-          <button className={styles.clearBtn} onClick={() => { setFilterCat('all'); setFilterStatus('all'); setFilterMonth('all'); setFilterYear('all'); setSearch('') }}>
+          <button className={styles.clearBtn} onClick={() => {
+            setFilterCat('all'); setFilterStatus('all')
+            setFilterMonth('all'); setFilterYear('all'); setSearch('')
+          }}>
             Limpiar filtros
           </button>
         )}
+      </div>
+
+      {/* ── Ordenar por ── */}
+      <div className={styles.sortRow}>
+        <span className={styles.sortLabel}>Ordenar por</span>
+        <select
+          value={sortField}
+          onChange={e => { setSortField(e.target.value); setSortDir('desc') }}
+          className={styles.select}
+        >
+          {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+        <button
+          className={`${styles.dirBtn} ${sortDir === 'asc' ? styles.dirBtnAsc : ''}`}
+          onClick={() => setSortDir(d => d === 'asc' ? 'desc' : 'asc')}
+          title="Cambiar dirección"
+        >
+          {sortDir === 'asc' ? '↑ Asc' : '↓ Desc'}
+        </button>
       </div>
 
       <p className={styles.count}>{filtered.length} registro{filtered.length !== 1 ? 's' : ''}</p>
@@ -152,21 +244,53 @@ export default function Registros({ tasks }) {
         <div className={styles.empty}>No hay registros que coincidan.</div>
       ) : (
         <div className={styles.table}>
+
+          {/* ── Cabecera con sort ── */}
           <div className={styles.thead}>
-            <span className={styles.cTask}>Tarea</span>
-            <span className={styles.cCat}>Categoría</span>
-            <span className={styles.cStatus}>Estado</span>
-            <span className={styles.cDate}>Inicio</span>
-            <span className={styles.cDate}>Deadline</span>
-            <span className={styles.cTime}>Tiempo total</span>
+            <button
+              className={`${styles.thBtn} ${sortField === 'title' ? styles.thActive : ''}`}
+              onClick={() => handleSort('title')}
+            >
+              Tarea <SortIcon field="title" sortField={sortField} sortDir={sortDir} />
+            </button>
+            <button
+              className={`${styles.thBtn} ${sortField === 'category' ? styles.thActive : ''}`}
+              onClick={() => handleSort('category')}
+            >
+              Categoría <SortIcon field="category" sortField={sortField} sortDir={sortDir} />
+            </button>
+            <button
+              className={`${styles.thBtn} ${sortField === 'status' ? styles.thActive : ''}`}
+              onClick={() => handleSort('status')}
+            >
+              Estado <SortIcon field="status" sortField={sortField} sortDir={sortDir} />
+            </button>
+            <button
+              className={`${styles.thBtn} ${sortField === 'startDate' ? styles.thActive : ''}`}
+              onClick={() => handleSort('startDate')}
+            >
+              Inicio <SortIcon field="startDate" sortField={sortField} sortDir={sortDir} />
+            </button>
+            <button
+              className={`${styles.thBtn} ${sortField === 'endDate' ? styles.thActive : ''}`}
+              onClick={() => handleSort('endDate')}
+            >
+              Deadline <SortIcon field="endDate" sortField={sortField} sortDir={sortDir} />
+            </button>
+            <button
+              className={`${styles.thBtn} ${sortField === 'totalTime' ? styles.thActive : ''}`}
+              onClick={() => handleSort('totalTime')}
+            >
+              Tiempo total <SortIcon field="totalTime" sortField={sortField} sortDir={sortDir} />
+            </button>
           </div>
 
+          {/* ── Filas ── */}
           {filtered.map(task => {
-            const history = task.history || []
+            const history  = task.history || []
             const durations = calcDurations(history)
-            const totalMs = calcTotal(history)
-            const isOpen = expanded === task.id
-            const lastEntry = history[history.length - 1]
+            const totalMs   = calcTotal(history)
+            const isOpen    = expanded === task.id
 
             return (
               <div key={task.id} className={styles.rowGroup}>
@@ -208,26 +332,29 @@ export default function Registros({ tasks }) {
                         <h4 className={styles.detailH}>Historial de cambios</h4>
                         <div className={styles.timeline}>
                           {history.map((entry, i) => {
-                            const next = history[i + 1]
-                            const dur = fmtDuration(next
+                            const next  = history[i + 1]
+                            const dur   = fmtDuration(next
                               ? new Date(next.timestamp) - new Date(entry.timestamp)
                               : new Date() - new Date(entry.timestamp))
                             const isLast = i === history.length - 1
                             return (
                               <div key={entry.id || i} className={styles.tlItem}>
-                                <div className={styles.tlDot} style={{ background: STATUSES[entry.toStatus]?.color || '#9ca3af' }} />
+                                <div className={styles.tlDot}
+                                  style={{ background: STATUSES[entry.toStatus]?.color || '#9ca3af' }} />
                                 {!isLast && <div className={styles.tlLine} />}
                                 <div className={styles.tlBody}>
                                   <div className={styles.tlStates}>
                                     {entry.fromStatus && (
                                       <>
-                                        <span className={styles.tlBadge} style={{ background: STATUSES[entry.fromStatus]?.bg, color: STATUSES[entry.fromStatus]?.textColor }}>
+                                        <span className={styles.tlBadge}
+                                          style={{ background: STATUSES[entry.fromStatus]?.bg, color: STATUSES[entry.fromStatus]?.textColor }}>
                                           {STATUSES[entry.fromStatus]?.label}
                                         </span>
                                         <span className={styles.tlArrow}>→</span>
                                       </>
                                     )}
-                                    <span className={styles.tlBadge} style={{ background: STATUSES[entry.toStatus]?.bg, color: STATUSES[entry.toStatus]?.textColor }}>
+                                    <span className={styles.tlBadge}
+                                      style={{ background: STATUSES[entry.toStatus]?.bg, color: STATUSES[entry.toStatus]?.textColor }}>
                                       {STATUSES[entry.toStatus]?.label}
                                     </span>
                                   </div>
@@ -248,12 +375,14 @@ export default function Registros({ tasks }) {
                     </div>
 
                     {task.cancelReason && (
-                      <div className={styles.alertNote} style={{ background: '#fff0f0', color: '#b91c1c', borderColor: '#fca5a5' }}>
+                      <div className={styles.alertNote}
+                        style={{ background: '#fff0f0', color: '#b91c1c', borderColor: '#fca5a5' }}>
                         <strong>Motivo de cancelación:</strong> {task.cancelReason}
                       </div>
                     )}
                     {task.status === 'reprogramado' && task.rescheduledTo && (
-                      <div className={styles.alertNote} style={{ background: '#f0f4ff', color: '#3730a3', borderColor: '#a5b4fc' }}>
+                      <div className={styles.alertNote}
+                        style={{ background: '#f0f4ff', color: '#3730a3', borderColor: '#a5b4fc' }}>
                         <strong>Reprogramado para:</strong> {fmtDate(task.rescheduledTo)}
                       </div>
                     )}
