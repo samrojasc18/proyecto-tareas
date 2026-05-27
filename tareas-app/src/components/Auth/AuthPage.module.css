@@ -1,0 +1,180 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c50);
+  padding: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 40px rgba(0, 29, 57, 0.1);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.brandIcon { font-size: 26px; }
+
+.brandName {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--c900);
+  letter-spacing: -0.02em;
+}
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  background: var(--c50);
+  border-radius: 12px;
+  padding: 3px;
+  margin-bottom: 28px;
+  gap: 2px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c500);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.tab:hover:not(.tabActive) { color: var(--c700); }
+
+.tabActive {
+  background: #fff;
+  color: var(--c900);
+  font-weight: 600;
+  box-shadow: 0 1px 6px rgba(0, 29, 57, 0.12);
+}
+
+/* ── Form ── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--c700);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.field input {
+  padding: 12px 14px;
+  border: 1.5px solid var(--c100);
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--c900);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  font-family: inherit;
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.field input:focus {
+  border-color: var(--c400);
+  box-shadow: 0 0 0 3px rgba(78, 142, 162, 0.12);
+}
+
+.passwordWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordWrap input { padding-right: 44px; }
+
+.eyeBtn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.5;
+  line-height: 1;
+  transition: opacity 0.15s;
+}
+
+.eyeBtn:hover { opacity: 0.85; }
+
+/* ── Feedback messages ── */
+.error {
+  margin: 0;
+  color: #9b2c2c;
+  font-size: 13px;
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  padding: 10px 14px;
+  border-radius: 8px;
+  line-height: 1.4;
+}
+
+.success {
+  margin: 0;
+  color: #1a6e56;
+  font-size: 13px;
+  background: #e0f5ee;
+  border: 1px solid #b2dfdb;
+  padding: 10px 14px;
+  border-radius: 8px;
+  line-height: 1.4;
+}
+
+/* ── Submit button ── */
+.submit {
+  background: var(--c700);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  font-family: inherit;
+  margin-top: 4px;
+}
+
+.submit:hover:not(:disabled) { background: var(--c500); }
+.submit:active:not(:disabled) { transform: scale(0.99); }
+.submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .card {
+    padding: 32px 24px;
+    border-radius: 16px;
+  }
+}

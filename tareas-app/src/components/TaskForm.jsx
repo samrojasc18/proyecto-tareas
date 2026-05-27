@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { todayStr } from '../utils/dates'
-import { PRIORITIES, getCategories, addCategory } from '../utils/statuses'
+import { PRIORITIES, getCategories, addCategory as addCategoryLegacy } from '../utils/statuses'
 import styles from './TaskForm.module.css'
 
-export default function TaskForm({ onSubmit, onCancel, initialDate, initialData }) {
+export default function TaskForm({ onSubmit, onCancel, initialDate, initialData, categories: categoriesProp, addCategory: addCategoryProp }) {
   const [form, setForm] = useState({
     title: initialData?.title || '',
     description: initialData?.description || '',
@@ -13,7 +13,11 @@ export default function TaskForm({ onSubmit, onCancel, initialDate, initialData 
     priority: initialData?.priority || 'medium',
     category: initialData?.category || '',
   })
-  const [categories, setCategories] = useState(getCategories)
+  // Use prop-supplied categories if available, otherwise fall back to localStorage
+  const [localCategories, setLocalCategories] = useState(
+    () => categoriesProp ?? getCategories()
+  )
+  const categories = categoriesProp ?? localCategories
   const [newCat, setNewCat] = useState('')
   const [addingCat, setAddingCat] = useState(false)
 
@@ -21,11 +25,15 @@ export default function TaskForm({ onSubmit, onCancel, initialDate, initialData 
     setForm(prev => ({ ...prev, [field]: value }))
   }
 
-  function handleAddCategory() {
+  async function handleAddCategory() {
     const name = newCat.trim()
     if (!name) return
-    const updated = addCategory(name)
-    setCategories(updated)
+    if (addCategoryProp) {
+      await addCategoryProp(name)
+    } else {
+      const updated = addCategoryLegacy(name)
+      setLocalCategories(updated)
+    }
     set('category', name)
     setNewCat('')
     setAddingCat(false)

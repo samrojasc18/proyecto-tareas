@@ -1,4 +1,26 @@
-.page { padding: 20px 20px 48px; max-width: 680px; margin: 0 auto; }
+.page { padding: 20px 24px 48px; max-width: 1200px; margin: 0 auto; }
+
+/* ── Layout lado a lado ──────────────────── */
+.calBody {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.calLeft {
+  flex-shrink: 0;
+  width: 340px;
+}
+
+.calRight {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+  .calBody { flex-direction: column; }
+  .calLeft { width: 100%; }
+}
 
 .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 
@@ -202,13 +224,13 @@
 }
 
 /* ── Calendar grid ────────────────────────── */
-.grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 20px; }
+.grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 0; }
 
-.dayLabel { text-align: center; font-size: 11px; font-weight: 600; color: var(--c300); padding: 4px 0 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+.dayLabel { text-align: center; font-size: 10px; font-weight: 600; color: var(--c300); padding: 3px 0 6px; text-transform: uppercase; letter-spacing: 0.04em; }
 
 .cell {
   aspect-ratio: 1;
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1.5px solid transparent;
   background: transparent;
   cursor: pointer;
@@ -226,19 +248,19 @@
 .today { background: var(--c100); border-color: var(--c300); }
 .selected { background: var(--c700) !important; border-color: var(--c700) !important; }
 
-.dayNum { font-size: 13px; font-weight: 500; color: var(--c500); }
+.dayNum { font-size: 12px; font-weight: 500; color: var(--c500); }
 .selected .dayNum { color: #fff; }
 .today .dayNum { color: var(--c700); font-weight: 700; }
 .today.selected .dayNum { color: #fff; }
 
 .dots { display: flex; gap: 2px; align-items: center; }
-.dot { width: 4px; height: 4px; border-radius: 50%; }
+.dot { width: 3px; height: 3px; border-radius: 50%; }
 .selected .dot { background: rgba(255,255,255,0.7) !important; }
-.dotMore { font-size: 9px; color: var(--c500); font-weight: 600; }
+.dotMore { font-size: 8px; color: var(--c500); font-weight: 600; }
 .selected .dotMore { color: rgba(255,255,255,0.8); }
 
 /* ── Day panel ────────────────────────────── */
-.dayPanel { background: #fff; border-radius: 20px; padding: 20px; box-shadow: 0 2px 16px rgba(0,29,57,0.07); border: 1px solid var(--c100); }
+.dayPanel { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 2px 12px rgba(0,29,57,0.06); border: 1px solid var(--c100); }
 
 .dayPanelHeader { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
 
@@ -259,3 +281,51 @@
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 8px;
 }
+
+/* ── Barra de orden ── */
+.sortBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.sortLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c400);
+  white-space: nowrap;
+}
+
+.sortSelect {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--c100);
+  background: var(--c50);
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--c500);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.12s;
+}
+
+.sortSelect:focus { border-color: var(--c500); }
+
+.dirBtn {
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--c100);
+  background: var(--c50);
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--c500);
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+
+.dirBtn:hover { background: var(--c100); color: var(--c700); }
+.dirBtnAsc { border-color: var(--c300); color: var(--c700); }

@@ -4,7 +4,18 @@
       "Bash(npm --version)",
       "PowerShell(node --version)",
       "PowerShell(npm --version)",
-      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); node --version; npm --version)"
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); node --version; npm --version)",
+      "Bash(ls /mnt/c/Users/Samiae/Downloads/ 2>/dev/null | head -20 || echo \"Cannot access Windows filesystem via /mnt/c\")",
+      "mcp__Claude_Preview__preview_start",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__Claude_in_Chrome__browser_batch",
+      "mcp__Claude_in_Chrome__computer",
+      "PowerShell(Get-NetTCPConnection -LocalPort 5173 -State Listen -ErrorAction SilentlyContinue)",
+      "mcp__Claude_in_Chrome__tabs_create_mcp",
+      "Bash(npm install *)",
+      "PowerShell($env:PATH += \";C:\\\\Program Files\\\\nodejs;C:\\\\Users\\\\Samiae\\\\AppData\\\\Roaming\\\\npm\"; node --version; npm --version)",
+      "PowerShell(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Samiae\\\\Downloads\\\\PROYECTO TAREAS\\\\tareas-app\\\\src\\\\components\\\\Auth\")",
+      "PowerShell(\\(Get-Command npm\\).Source)"
     ]
   }
 }

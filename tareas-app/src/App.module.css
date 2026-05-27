@@ -150,19 +150,18 @@
 
 /* ── Sidebar footer ─────────────────────── */
 .sidebarFooter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding-top: 16px;
   border-top: 1px solid rgba(189, 216, 233, 0.12);
   margin-top: 12px;
+  min-width: 0;
 }
 
 .taskCount {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--c300);
-  background: rgba(189, 216, 233, 0.1);
-  padding: 6px 10px;
-  border-radius: 8px;
-  display: block;
-  text-align: center;
   white-space: nowrap;
 }
 
@@ -237,3 +236,127 @@
 
 .mobileTab span:first-child { font-size: 20px; }
 .mobileTabActive { color: var(--c200); }
+
+/* ── Loading screen ── */
+.loadingScreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--c50);
+}
+
+.loadingIcon  { font-size: 36px; }
+.loadingText  { font-size: 14px; color: var(--c500); }
+
+.tasksLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  font-size: 14px;
+  color: var(--c500);
+}
+
+/* ── Sidebar footer with user info ── */
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.userEmail {
+  font-size: 11px;
+  color: var(--c200);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.logoutBtn {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: var(--c300);
+  font-size: 11px;
+  padding: 5px 9px;
+  border-radius: 7px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+  font-family: inherit;
+}
+
+.logoutBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* ── Migration banner ── */
+.migrationBanner {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--c700);
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 13px;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 29, 57, 0.3);
+  max-width: 560px;
+  width: calc(100% - 48px);
+  flex-wrap: wrap;
+}
+
+.migrationActions { display: flex; gap: 8px; flex-shrink: 0; }
+
+.migrImport {
+  background: #fff;
+  color: var(--c700);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+.migrImport:hover { opacity: 0.85; }
+
+.migrDismiss {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.migrDismiss:hover { background: rgba(255,255,255,0.25); }
+
+.migrToast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--c900);
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 13px;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}

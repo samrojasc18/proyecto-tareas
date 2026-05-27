@@ -6,7 +6,7 @@
   color: #fff;
 }
 
-.heroInner { max-width: 640px; margin: 0 auto; }
+.heroInner { max-width: 900px; margin: 0 auto; }
 
 .greeting { font-size: 14px; opacity: 0.75; margin: 0 0 6px; text-transform: capitalize; letter-spacing: 0.02em; }
 
@@ -22,7 +22,7 @@
 
 .progressText { font-size: 13px; opacity: 0.85; white-space: nowrap; }
 
-.content { max-width: 640px; margin: -28px auto 0; padding: 0 20px 60px; }
+.content { max-width: 900px; margin: -28px auto 0; padding: 0 24px 60px; }
 
 .startCard {
   background: #fff;
@@ -76,8 +76,12 @@
 
 .list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 540px) {
+  .list { grid-template-columns: 1fr; }
 }
 
 .addBtn {
@@ -100,3 +104,51 @@
 
 .linkBtn { background: none; border: none; font-size: 13px; font-family: inherit; color: var(--c500); cursor: pointer; font-weight: 500; }
 .linkBtn:hover { color: var(--c700); }
+
+/* ── Barra de orden ── */
+.sortBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.sortLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c400);
+  white-space: nowrap;
+}
+
+.sortSelect {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1.5px solid var(--c100);
+  background: #fff;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--c500);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.12s;
+}
+
+.sortSelect:focus { border-color: var(--c500); }
+
+.dirBtn {
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--c100);
+  background: #fff;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--c500);
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+
+.dirBtn:hover { background: var(--c100); color: var(--c700); }
+.dirBtnAsc { background: var(--c50); border-color: var(--c300); color: var(--c700); }

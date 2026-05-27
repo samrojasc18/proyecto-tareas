@@ -1,8 +1,8 @@
 .card {
   background: #fff;
   border: 1.5px solid var(--c100);
-  border-radius: 12px;
-  padding: 9px 13px 8px;
+  border-radius: 14px;
+  padding: 14px 16px 13px;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 
@@ -22,7 +22,7 @@
 
 .title {
   flex: 1;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--c900);
   cursor: pointer;
@@ -67,20 +67,20 @@
   cursor: pointer;
 }
 
-.divider { height: 1px; background: var(--c50); margin: 5px 0 6px; }
+.divider { height: 1px; background: var(--c50); margin: 8px 0 10px; }
 
 .metaRow {
   display: flex;
-  gap: 14px;
+  gap: 20px;
   flex-wrap: wrap;
   align-items: flex-start;
 }
 
-.metaCol { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.metaCol { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 
 .metaLabel { font-size: 10px; font-weight: 700; color: var(--c300); text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
 
-.metaVal { font-size: 12px; font-weight: 500; color: var(--c500); white-space: nowrap; }
+.metaVal { font-size: 13px; font-weight: 500; color: var(--c500); white-space: nowrap; }
 
 .deadline { color: #7a5200; background: #fff8e0; padding: 1px 7px; border-radius: 10px; font-size: 11px; }
 

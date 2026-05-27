@@ -7,7 +7,7 @@ import styles from './TaskCard.module.css'
 const PRIORITY_COLORS = { low: '#43aa8b', medium: '#f59e0b', high: '#e05252' }
 const PRIORITY_LABELS = { low: 'Baja', medium: 'Media', high: 'Alta' }
 
-export default function TaskCard({ task, onStatusChange, onDelete, onEdit }) {
+export default function TaskCard({ task, onStatusChange, onDelete, onEdit, categories, addCategory }) {
   const [editOpen, setEditOpen] = useState(false)
   const isInactive = task.status === 'realizado' || task.status === 'cancelado'
 
@@ -82,6 +82,8 @@ export default function TaskCard({ task, onStatusChange, onDelete, onEdit }) {
             onSubmit={handleEditSubmit}
             onCancel={() => setEditOpen(false)}
             initialData={task}
+            categories={categories}
+            addCategory={addCategory}
           />
         </Modal>
       )}
