@@ -228,12 +228,25 @@ export function useTasks() {
       cancelReason:  metadata.cancelReason  || null,
     }
 
-    return updateTask(id, {
+    const changes = {
       status:        newStatus,
       history:       [...(task.history || []), entry],
       rescheduledTo: metadata.rescheduledTo != null ? metadata.rescheduledTo : task.rescheduledTo,
       cancelReason:  metadata.cancelReason  != null ? metadata.cancelReason  : task.cancelReason,
-    })
+    }
+
+    // Si la tarea sale del estado "reprogramado", mover startDate a la fecha
+    // reprogramada para que quede permanentemente en ese día
+    if (task.status === 'reprogramado' && task.rescheduledTo && newStatus !== 'reprogramado') {
+      changes.startDate     = task.rescheduledTo
+      changes.rescheduledTo = null  // ya no hace falta, se aplicó
+      // Si el endDate quedó antes del nuevo startDate, limpiarlo
+      if (task.endDate && task.endDate < task.rescheduledTo) {
+        changes.endDate = null
+      }
+    }
+
+    return updateTask(id, changes)
   }
 
   function getTasksByDate(dateStr) {
