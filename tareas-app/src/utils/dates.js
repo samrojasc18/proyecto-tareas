@@ -1,9 +1,29 @@
 export function toDateStr(date) {
-  return date.toISOString().slice(0, 10)
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
 }
 
 export function todayStr() {
   return toDateStr(new Date())
+}
+
+export function addDays(dateStr, n) {
+  const [y, m, d] = dateStr.split('-').map(Number)
+  return toDateStr(new Date(y, m - 1, d + n))
+}
+
+// Determina si una tarea aparece en una fecha dada.
+// Las tareas reprogramadas sólo aparecen en su nueva fecha.
+export function matchesDate(task, dateStr) {
+  if (task.status === 'reprogramado' && task.rescheduledTo) {
+    return task.rescheduledTo === dateStr
+  }
+  const start = task.startDate || task.date
+  const end   = task.endDate
+  if (end) return start <= dateStr && end >= dateStr
+  return start === dateStr
 }
 
 export function formatDate(dateStr) {

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { getDaysInMonth, getFirstDayOfMonth, toDateStr, todayStr, formatDate } from '../utils/dates'
+import { getDaysInMonth, getFirstDayOfMonth, toDateStr, todayStr, formatDate, matchesDate } from '../utils/dates'
 import TaskCard from './TaskCard'
 import TaskForm from './TaskForm'
 import Modal from './Modal'
@@ -14,8 +14,8 @@ const STATUS_ORDER_LIST = ['en-curso', 'pendiente', 'en-revision', 'reprogramado
 const PRIORITY_ORDER    = { high: 3, medium: 2, low: 1 }
 
 const SORT_OPTIONS = [
-  { value: 'priority', label: 'Prioridad'     },
   { value: 'status',   label: 'Estado'        },
+  { value: 'priority', label: 'Prioridad'     },
   { value: 'title',    label: 'Nombre'        },
   { value: 'updated',  label: 'Actualización' },
 ]
@@ -121,18 +121,14 @@ export default function Calendar({ tasks, addTask, updateTask, deleteTask, chang
   const [selected,    setSelected]    = useState(today)
   const [showForm,    setShowForm]    = useState(false)
   const [showPicker,  setShowPicker]  = useState(false)
-  const [sortField,   setSortField]   = useState('priority')
-  const [sortDir,     setSortDir]     = useState('desc')
+  const [sortField,   setSortField]   = useState('status')
+  const [sortDir,     setSortDir]     = useState('asc')
 
   const year  = viewDate.getFullYear()
   const month = viewDate.getMonth()
 
   function getTasksForDate(dateStr) {
-    return tasks.filter(t => {
-      const start = t.startDate || t.date
-      const end   = t.endDate
-      return end ? start <= dateStr && end >= dateStr : start === dateStr
-    })
+    return tasks.filter(t => matchesDate(t, dateStr))
   }
 
   const selectedTasks     = getTasksForDate(selected)

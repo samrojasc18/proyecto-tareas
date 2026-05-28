@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
+import { matchesDate } from '../utils/dates'
 
 const DEFAULT_CATEGORIES = ['Ventas', 'Deacs', 'Proyecciones', 'Facturación', 'BI', 'Procesos', 'Equipos']
 const LEGACY_TASKS_KEY = 'tareas-app-data'
@@ -236,12 +237,7 @@ export function useTasks() {
   }
 
   function getTasksByDate(dateStr) {
-    return tasks.filter(t => {
-      const start = t.startDate || t.date
-      const end   = t.endDate
-      if (end) return start <= dateStr && end >= dateStr
-      return start === dateStr
-    })
+    return tasks.filter(t => matchesDate(t, dateStr))
   }
 
   // ── Categories ────────────────────────────────────────────────────────────

@@ -1,16 +1,16 @@
 import { useState } from 'react'
-import { todayStr, formatDate, getGreeting } from '../utils/dates'
+import { todayStr, formatDate, getGreeting, addDays, matchesDate } from '../utils/dates'
 import TaskCard from './TaskCard'
 import TaskForm from './TaskForm'
 import Modal from './Modal'
 import styles from './Dashboard.module.css'
 
-const STATUS_ORDER  = ['en-curso', 'pendiente', 'en-revision', 'reprogramado', 'realizado', 'cancelado']
+const STATUS_ORDER   = ['en-curso', 'pendiente', 'en-revision', 'reprogramado', 'realizado', 'cancelado']
 const PRIORITY_ORDER = { high: 3, medium: 2, low: 1 }
 
 const SORT_OPTIONS = [
-  { value: 'priority', label: 'Prioridad'     },
   { value: 'status',   label: 'Estado'        },
+  { value: 'priority', label: 'Prioridad'     },
   { value: 'title',    label: 'Nombre'        },
   { value: 'updated',  label: 'Actualización' },
 ]
@@ -37,57 +37,79 @@ function sortTasks(tasks, field, dir) {
 
 export default function Dashboard({ tasks, addTask, updateTask, deleteTask, changeStatus, categories, addCategory, onGoToCalendar }) {
   const today = todayStr()
-  const todayTasks = tasks.filter(t => {
-    const start = t.startDate || t.date
-    const end = t.endDate
-    return end ? start <= today && end >= today : start === today
-  })
-
-  const active    = todayTasks.filter(t => !['realizado', 'cancelado'].includes(t.status))
-  const done      = todayTasks.filter(t => t.status === 'realizado')
-  const cancelled = todayTasks.filter(t => t.status === 'cancelado')
-
+  const [selectedDate, setSelectedDate] = useState(today)
   const [showForm,  setShowForm]  = useState(false)
-  const [sortField, setSortField] = useState('priority')
-  const [sortDir,   setSortDir]   = useState('desc')
+  const [sortField, setSortField] = useState('status')
+  const [sortDir,   setSortDir]   = useState('asc')
+
+  const isToday       = selectedDate === today
+  const selectedTasks = tasks.filter(t => matchesDate(t, selectedDate))
+  const active        = selectedTasks.filter(t => !['realizado', 'cancelado'].includes(t.status))
+  const done          = selectedTasks.filter(t => t.status === 'realizado')
+  const cancelled     = selectedTasks.filter(t => t.status === 'cancelado')
 
   const sortedActive    = sortTasks(active,    sortField, sortDir)
   const sortedDone      = sortTasks(done,      sortField, sortDir)
   const sortedCancelled = sortTasks(cancelled, sortField, sortDir)
 
-  const progress = todayTasks.length > 0 ? Math.round((done.length / todayTasks.length) * 100) : 0
+  const progress = selectedTasks.length > 0
+    ? Math.round((done.length / selectedTasks.length) * 100)
+    : 0
 
   return (
     <div className={styles.page}>
       <div className={styles.hero}>
         <div className={styles.heroInner}>
           <p className={styles.greeting}>{getGreeting()}</p>
-          <h1 className={styles.date}>{formatDate(today)}</h1>
-          {todayTasks.length > 0 ? (
+
+          {/* ── Navegación de fecha ── */}
+          <div className={styles.dateRow}>
+            <button className={styles.navArrow} onClick={() => setSelectedDate(d => addDays(d, -1))}>‹</button>
+            <div className={styles.dateLabel}>
+              <h1 className={styles.date}>{formatDate(selectedDate)}</h1>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={e => e.target.value && setSelectedDate(e.target.value)}
+                className={styles.dateInput}
+                title="Seleccionar fecha"
+              />
+            </div>
+            <button className={styles.navArrow} onClick={() => setSelectedDate(d => addDays(d, 1))}>›</button>
+            {!isToday && (
+              <button className={styles.todayBtn} onClick={() => setSelectedDate(today)}>Hoy</button>
+            )}
+          </div>
+
+          {selectedTasks.length > 0 ? (
             <div className={styles.progressWrap}>
               <div className={styles.progressBar}>
                 <div className={styles.progressFill} style={{ width: `${progress}%` }} />
               </div>
-              <span className={styles.progressText}>{done.length} de {todayTasks.length} realizadas</span>
+              <span className={styles.progressText}>{done.length} de {selectedTasks.length} realizadas</span>
             </div>
           ) : (
-            <p className={styles.subtitle}>No tienes tareas para hoy. ¿Empezamos?</p>
+            <p className={styles.subtitle}>
+              {isToday ? 'No tienes tareas para hoy. ¿Empezamos?' : 'No hay tareas para este día.'}
+            </p>
           )}
         </div>
       </div>
 
       <div className={styles.content}>
-        {todayTasks.length === 0 && (
+        {selectedTasks.length === 0 && (
           <div className={styles.startCard}>
             <div className={styles.startIcon}>☀️</div>
-            <h2 className={styles.startTitle}>Empieza tu día</h2>
-            <p className={styles.startDesc}>Añade las tareas que quieres completar hoy.</p>
-            <button className={styles.startBtn} onClick={() => setShowForm(true)}>+ Añadir primera tarea</button>
+            <h2 className={styles.startTitle}>{isToday ? 'Empieza tu día' : 'Sin tareas'}</h2>
+            <p className={styles.startDesc}>
+              {isToday ? 'Añade las tareas que quieres completar hoy.' : 'Añade una tarea para este día.'}
+            </p>
+            <button className={styles.startBtn} onClick={() => setShowForm(true)}>+ Añadir tarea</button>
           </div>
         )}
 
         {/* ── Barra de orden ── */}
-        {todayTasks.length > 0 && (
+        {selectedTasks.length > 0 && (
           <div className={styles.sortBar}>
             <span className={styles.sortLabel}>Ordenar por</span>
             <select
@@ -151,7 +173,7 @@ export default function Dashboard({ tasks, addTask, updateTask, deleteTask, chan
           </section>
         )}
 
-        {todayTasks.length > 0 && (
+        {selectedTasks.length > 0 && (
           <button className={styles.addBtn} onClick={() => setShowForm(true)}>+ Añadir tarea</button>
         )}
 
@@ -165,7 +187,7 @@ export default function Dashboard({ tasks, addTask, updateTask, deleteTask, chan
           <TaskForm
             onSubmit={d => { addTask(d); setShowForm(false) }}
             onCancel={() => setShowForm(false)}
-            initialDate={today}
+            initialDate={selectedDate}
             categories={categories}
             addCategory={addCategory}
           />
